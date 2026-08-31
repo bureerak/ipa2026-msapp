@@ -16,12 +16,13 @@
   <ul>
     {% for comment in data %}
       <li>
-         {{ comment.ip }} - {{ comment.username }}
-         <form method="POST" action="{{ url_for('delete_comment') }}" style="display:inline">
-           <input type="hidden" name="ip" value="{{ comment.ip }}">
-           <input type="hidden" name="username" value="{{ comment.username }}">
-           <button type="submit">Delete</button>
-         </form>
+        <a href="{{ url_for('show_route', ip=comment.ip) }}">Show Route</a>
+        {{ comment.ip }} - {{ comment.username }}
+        <form method="POST" action="{{ url_for('delete_comment') }}" style="display:inline">
+          <input type="hidden" name="ip" value="{{ comment.ip }}">
+          <input type="hidden" name="username" value="{{ comment.username }}">
+          <button type="submit">Delete</button>
+        </form>
       </li>
     {% endfor %}
   </ul>

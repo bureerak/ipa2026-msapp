@@ -5,6 +5,8 @@ services:
       - "8080:8080"
     depends_on:
       - mongo
+      - scheduler
+      - worker
     networks:
       - app-net
     env_file:
@@ -12,6 +14,7 @@ services:
     environment:
       MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/"
       DB_NAME: "ipa2026_db"
+      INTERFACE_COLLECTION: "interface_status"
 
   scheduler:
     build: ./scheduler
@@ -25,6 +28,21 @@ services:
       TARGET_QUEUE: "rabbitmq"
     env_file:
       - .env
+  worker:
+    build: ./worker
+    depends_on:
+      - mongo
+      - rabbitmq
+    networks:
+      - app-net
+    environment:
+      MONGO_URI: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/"
+      DB_NAME: "ipa2026_db"
+      TARGET_QUEUE: "rabbitmq"
+      INTERFACE_COLLECTION: "interface_status"
+    env_file:
+      - .env
+    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:3-management

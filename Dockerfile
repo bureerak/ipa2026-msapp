@@ -6,7 +6,7 @@ RUN pip install pymongo
 
 COPY ./static /home/myapp/static/
 
-COPY ./templates /home/myapp/templates/
+COPY ./templates/* /home/myapp/templates/
 
 COPY ./app.py /home/myapp/
 

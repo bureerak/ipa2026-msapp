@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Route Information</title>
+
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+{% if data %}
+
+    <h1>Router: {{ data[0]["router_ip"] }}</h1>
+
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>Interface</th>
+            <th>IP Address</th>
+            <th>Status</th>
+            <th>Protocol</th>
+        </tr>
+
+        {% for item in data %}
+
+            {% for intf in item["interfaces"] %}
+            <tr>
+                <td>{{ item["timestamp"] }}</td>
+                <td>{{ intf["interface"] }}</td>
+                <td>{{ intf["ip_address"] }}</td>
+                <td>{{ intf["status"] }}</td>
+                <td>{{ intf["proto"] }}</td>
+            </tr>
+            {% endfor %}
+
+        {% endfor %}
+
+    </table>
+
+{% endif %}
+
+</body>
+</html>
