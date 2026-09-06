@@ -52,7 +52,7 @@ def delete_comment():
 
 @app.route("/route/<ip>", methods=["GET"])
 def show_route(ip):
-    data = myinterface.find({"router_ip": ip}).sort({"timestamp": -1}).limit(3)
+    data = myinterface.find({"router_ip": ip}).sort({"timestamp": -1}).limit(5)
     return render_template("route.html", data=data)
 
 

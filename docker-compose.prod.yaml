@@ -7,3 +7,6 @@ services:
 
   worker:
     image: ${DOCKERHUB_USERNAME}/worker:latest
+    deploy:
+      mode: replicated
+      replicas: 3
