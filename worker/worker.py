@@ -50,11 +50,16 @@ def queue_consume(host):
         print(info)
         insert_router_info(data['ip'], info)
 
-    channel.basic_consume(queue='router_jobs', on_message_callback=callback, auto_ack=True)
+    channel.basic_consume(
+        queue='router_jobs',
+        on_message_callback=callback,
+        auto_ack=True
+    )
 
     print(' [*] Waiting for messages.')
 
     channel.start_consuming()
+
 
 if __name__ == "__main__":
     target = os.environ.get("TARGET_QUEUE")
