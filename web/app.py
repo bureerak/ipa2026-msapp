@@ -18,12 +18,14 @@ myinterface = mydb[interface]
 app = Flask(__name__)
 data = []
 
+
 @app.route("/")
 def main():
     data.clear()
     for doc in mycol.find():
         data.append(doc)
     return render_template("index.html", data=data)
+
 
 @app.route("/add", methods=["POST"])
 def add_comment():
@@ -33,8 +35,11 @@ def add_comment():
 
     if ip and username and password:
         data.append({"ip": ip, "username": username, "password": password})
-        mycol.insert_one({"ip": ip, "username": username, "password": password})
+        mycol.insert_one(
+            {"ip": ip, "username": username, "password": password}
+        )
     return redirect("/")
+
 
 @app.route("/delete", methods=["POST"])
 def delete_comment():
@@ -46,10 +51,12 @@ def delete_comment():
         print("delete failed")
     return redirect(url_for("main"))
 
+
 @app.route("/route/<ip>", methods=["GET"])
 def show_route(ip):
     data = myinterface.find({"router_ip": ip}).sort({"timestamp": -1}).limit(3)
     return render_template("route.html", data=data)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

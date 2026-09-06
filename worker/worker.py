@@ -1,26 +1,30 @@
 import json
-import pika, os
+import os
+
+import pika
 from database import insert_router_info
 from netmiko import ConnectHandler
 
-def interface_info(host, username, password):
 
+def interface_info(host, username, password):
     cisco_router = {
-    'device_type': 'cisco_ios', # Multi-vendor (e.g., juniper_junos, arista_eos)
-    'host': host,
-    'username': username,
-    'password': password,
-    'secret': 'enablePassword', # Optional: For privileged mode
-    'disabled_algorithms': {'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']}
+        'device_type': 'cisco_ios',
+        'host': host,
+        'username': username,
+        'password': password,
+        'secret': 'enablePassword',
+        'disabled_algorithms': {
+            'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']
+        }
     }
 
     ssh = ConnectHandler(**cisco_router)
     result = ssh.send_command("show ip interface brief", use_textfsm=True)
     return result
 
-def queue_consume(host):
 
-    username = os.environ.get("RABBITMQ_DEFAULT_USER") 
+def queue_consume(host):
+    username = os.environ.get("RABBITMQ_DEFAULT_USER")
     password = os.environ.get("RABBITMQ_DEFAULT_PASS")
 
     # Set your username and password
@@ -28,7 +32,12 @@ def queue_consume(host):
 
     # Set up connection parameters (host, port, virtual_host, credentials)
     parameters = pika.ConnectionParameters(
-        host=host, port=5672, virtual_host="/", credentials=credentials, connection_attempts=3,retry_delay=2
+        host=host,
+        port=5672,
+        virtual_host="/",
+        credentials=credentials,
+        connection_attempts=3,
+        retry_delay=2,
     )
 
     connection = pika.BlockingConnection(parameters)
@@ -46,7 +55,7 @@ def queue_consume(host):
     print(' [*] Waiting for messages.')
 
     channel.start_consuming()
-    
+
 if __name__ == "__main__":
     target = os.environ.get("TARGET_QUEUE")
     queue_consume(target)

@@ -1,6 +1,7 @@
-from datetime import datetime
 import os
+from datetime import datetime
 from pymongo import MongoClient
+
 
 def insert_router_info(router_ip, router_data):
 
@@ -18,5 +19,6 @@ def insert_router_info(router_ip, router_data):
         "interfaces": router_data
     })
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     pass
