@@ -8,14 +8,12 @@ from netmiko import ConnectHandler
 
 def interface_info(host, username, password):
     cisco_router = {
-        'device_type': 'cisco_ios',
-        'host': host,
-        'username': username,
-        'password': password,
-        'secret': 'enablePassword',
-        'disabled_algorithms': {
-            'pubkeys': ['rsa-sha2-256', 'rsa-sha2-512']
-        }
+        "device_type": "cisco_ios",
+        "host": host,
+        "username": username,
+        "password": password,
+        "secret": "enablePassword",
+        "disabled_algorithms": {"pubkeys": ["rsa-sha2-256", "rsa-sha2-512"]},
     }
 
     ssh = ConnectHandler(**cisco_router)
@@ -42,21 +40,19 @@ def queue_consume(host):
 
     connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
-    channel.queue_declare(queue='router_jobs')
+    channel.queue_declare(queue="router_jobs")
 
     def callback(ch, method, properties, body):
         data = json.loads(body.decode())
-        info = interface_info(data['ip'], data['username'], data['password'])
+        info = interface_info(data["ip"], data["username"], data["password"])
         print(info)
-        insert_router_info(data['ip'], info)
+        insert_router_info(data["ip"], info)
 
     channel.basic_consume(
-        queue='router_jobs',
-        on_message_callback=callback,
-        auto_ack=True
+        queue="router_jobs", on_message_callback=callback, auto_ack=True
     )
 
-    print(' [*] Waiting for messages.')
+    print(" [*] Waiting for messages.")
 
     channel.start_consuming()
 

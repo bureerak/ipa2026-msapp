@@ -25,9 +25,7 @@ def produce(host, body):
         routing_key="check_interfaces",
     )
 
-    channel.basic_publish(
-        exchange="jobs", routing_key="check_interfaces", body=body
-    )
+    channel.basic_publish(exchange="jobs", routing_key="check_interfaces", body=body)
 
     connection.close()
 

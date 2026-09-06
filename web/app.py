@@ -35,9 +35,7 @@ def add_comment():
 
     if ip and username and password:
         data.append({"ip": ip, "username": username, "password": password})
-        mycol.insert_one(
-            {"ip": ip, "username": username, "password": password}
-        )
+        mycol.insert_one({"ip": ip, "username": username, "password": password})
     return redirect("/")
 
 

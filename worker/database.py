@@ -13,12 +13,10 @@ def insert_router_info(router_ip, router_data):
     db = client[db_name]
     routers = db[interface]
 
-    router_data = routers.insert_one({
-        "router_ip": router_ip,
-        "timestamp": datetime.now(),
-        "interfaces": router_data
-    })
+    router_data = routers.insert_one(
+        {"router_ip": router_ip, "timestamp": datetime.now(), "interfaces": router_data}
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass
